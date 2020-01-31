@@ -1,44 +1,40 @@
-﻿using System;
-using MarsRover.Coordinates;
-using MarsRover.Directions;
-using MarsRover.Grids;
+﻿using MarsRover.Directions;
 using MarsRover.Locations;
 using MarsRover.Rovers;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using MarsRover.Coordinates;
+using MarsRover.Plateaus;
 
 namespace MarsRover
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
-            string[] data = { "1", "2", "0", "LMLMLMLMMLM", "3", "3", "1", "MMRMMRMRRM" };
+            string[] data = { "1", "2", "0", "LMLMLMLMM", "3", "3", "1", "MMRMMRMRRM" };
 
             var serviceProvider = CreateContainerBuilder();
-            var grid = serviceProvider.GetService<IGrid>();
-
-            grid.SetCoordinates(5,5);
-
+            var plateau = serviceProvider.GetService<IPlateau>();
+            plateau.SetSize(new Coordinate(5, 5));
 
             for (var i = 0; i < 7; i = i + 4)
             {
                 var rover = serviceProvider.GetService<IRover>();
-                rover.SetLocation(Convert.ToInt32(data[i]), Convert.ToInt32(data[i + 1]));
+                rover.SetLocation(new Coordinate(Convert.ToInt32(data[i]), Convert.ToInt32(data[i + 1])));
                 rover.TurnDirection((DirectionType)Convert.ToInt32(data[i + 2]));
-                rover.MoveAllRoversOnGrid(data[i + 3]);
+                rover.GiveCommand(data[i + 3]);
                 Console.WriteLine(rover.GetCurrentPosition());
             }
         }
 
-
         private static ServiceProvider CreateContainerBuilder()
         {
             return new ServiceCollection()
-                .AddTransient<IGrid, Grid>()
-                .AddTransient<ICoordinate, Coordinate>()
-                .AddTransient<ILocation, Location>()
-                .AddTransient<IDirection, Direction>()
-                .AddTransient<IRover, Rover>()
+                .AddScoped<IPlateau, Plateau>()
+                .AddScoped<ILocation, Location>()
+                .AddScoped<IDirection, Direction>()
+                .AddScoped<IRover, Rover>()
                 .BuildServiceProvider();
         }
     }

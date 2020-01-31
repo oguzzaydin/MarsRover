@@ -5,9 +5,9 @@ namespace MarsRover.Rovers
 {
     public interface IRover
     {
-        void SetLocation(int x, int y);
+        void SetLocation(ICoordinate coordinate);
         void TurnDirection(DirectionType direction);
         string GetCurrentPosition();
-        void MoveAllRoversOnGrid(string instruction);
+        void GiveCommand(string instruction);
     }
 }

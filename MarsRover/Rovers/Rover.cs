@@ -1,6 +1,7 @@
 ﻿using MarsRover.Directions;
 using MarsRover.Locations;
 using System;
+using MarsRover.Coordinates;
 
 namespace MarsRover.Rovers
 {
@@ -15,19 +16,13 @@ namespace MarsRover.Rovers
             _direction = direction;
         }
 
-        public void SetLocation(int x, int y)
-        {
-            _location.SetCoordinates(x,y);
-        }
+        public void SetLocation(ICoordinate coordinate) => _location.SetLocation(coordinate);
 
-        public void TurnDirection(DirectionType direction)
-        {
-            _direction.CurrentDirection = direction;
-        }
+        public void TurnDirection(DirectionType direction) => _direction.CurrentDirection = direction;
 
         public string GetCurrentPosition() => $"{_location.X} {_location.Y} {Enum.GetName(typeof(DirectionType), _direction.CurrentDirection)}";
 
-        public void MoveAllRoversOnGrid(string instruction)
+        public void GiveCommand(string instruction)
         {
             foreach (var direction in instruction)
             {
@@ -58,13 +53,10 @@ namespace MarsRover.Rovers
         private void TurnRight()
         {
             if (_direction.CurrentDirection == DirectionType.West)
-                _direction.CurrentDirection = default;
+                _direction.CurrentDirection = (DirectionType) (-1);
             _direction.CurrentDirection += 1;
         }
 
-        private void ProcessMoveInstruction()
-        {
-            _location.ChangeLocation(_direction.CurrentDirection);
-        }
+        private void ProcessMoveInstruction() => _location.ChangeLocation(_direction.CurrentDirection);
     }
 }
