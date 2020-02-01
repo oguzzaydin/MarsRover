@@ -45,14 +45,14 @@ namespace MarsRover.Rovers
 
         private void TurnLeft()
         {
-            if (_direction.CurrentDirection == DirectionType.North)
+            if (_direction.CurrentDirection.Equals(DirectionType.North))
                 _direction.CurrentDirection = (DirectionType)4;
             _direction.CurrentDirection -= 1;
         }
 
         private void TurnRight()
         {
-            if (_direction.CurrentDirection == DirectionType.West)
+            if (_direction.CurrentDirection.Equals(DirectionType.West))
                 _direction.CurrentDirection = (DirectionType) (-1);
             _direction.CurrentDirection += 1;
         }
